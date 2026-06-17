@@ -14,6 +14,7 @@ public class Monitor : BaseEntity
     public int? HttpStatusCode { get; set; }
     public MonitorStatus MonitorStatus { get; set; } = MonitorStatus.Pending;
     public DateTime? LastChecked { get; set; }
+    public DateTime NextChecked { get; set; }
 
     public User? User { get; init; }
     public ICollection<Log> Logs { get; init; } = new List<Log>();

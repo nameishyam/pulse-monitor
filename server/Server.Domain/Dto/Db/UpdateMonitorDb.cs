@@ -10,5 +10,6 @@ public class UpdateMonitorDb
     public HttpMethods? HttpMethod { get; set; }
     public int? HttpStatusCode { get; set; }
     public MonitorStatus? MonitorStatus { get; set; }
+    public DateTime? NextChecked { get; set; }
     public DateTime? LastChecked { get; set; }
 }

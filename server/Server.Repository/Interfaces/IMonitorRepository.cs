@@ -9,4 +9,5 @@ public interface IMonitorRepository
     Task<Monitor?> GetById(Guid id);
     Task<Guid> Create(CreateMonitorDb request);
     Task Update(UpdateMonitorDb request);
+    Task<ICollection<Monitor>> GetPendingMonitors();
 }

@@ -12,6 +12,7 @@ dist/
 #Env Files - Manually Ignored
 *.env
 appsettings.Development.json
+help.txt
 
 # Compiled Java class files
 *.class

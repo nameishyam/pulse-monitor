@@ -48,7 +48,15 @@ public class MonitorRepository(ServerDbContext context) : IMonitorRepository
         monitor.HttpStatusCode = request.HttpStatusCode ?? monitor.HttpStatusCode;
         monitor.MonitorStatus = request.MonitorStatus ?? monitor.MonitorStatus;
         monitor.LastChecked = request.LastChecked ?? monitor.LastChecked;
+        monitor.NextChecked = request.NextChecked ?? monitor.NextChecked;
 
         await context.SaveChangesAsync();
+    }
+
+    public async Task<ICollection<Monitor>> GetPendingMonitors()
+    {
+        return await context.Monitors
+            .Where(x => x.NextChecked <= DateTime.UtcNow)
+            .ToListAsync();
     }
 }

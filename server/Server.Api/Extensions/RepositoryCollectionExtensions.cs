@@ -16,7 +16,8 @@ public static class RepositoryCollectionExtensions
                 configuration.GetConnectionString("DefaultConnection")));
 
         services.AddScoped<IAuthRepository, AuthRepository>();
-        services.AddScoped<IMonitorRepository, MonitorRepository>();
+        services.AddScoped<IMonitorRepository, MonitorRepository>(); 
+        services.AddScoped<ILogRepository, LogRepository>();
 
         return services;
     }
