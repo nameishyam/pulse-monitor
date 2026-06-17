@@ -1,12 +1,10 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Server.Domain.Dto.Options;
+﻿using Server.Domain.Dto.Options;
 using Server.Service.Interfaces;
 using Server.Service.Services;
 
-namespace Server.Service;
+namespace Server.Api.Extensions;
 
-public static class DependencyInjection
+public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddService(
         this IServiceCollection services,
@@ -17,6 +15,7 @@ public static class DependencyInjection
 
         services.AddScoped<IEmailService, EmailService>();
         services.AddScoped<IAuthService, AuthService>();
+        services.AddScoped<IMonitorService, MonitorService>();
 
         return services;
     }

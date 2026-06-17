@@ -1,7 +1,7 @@
-using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Server.Domain.Dto.Request;
+using Server.Api.Extensions;
+using Server.Domain.Dto.Request.Auth;
 using Server.Service.Exceptions;
 using Server.Service.Interfaces;
 
@@ -63,11 +63,11 @@ public class AuthController(IAuthService authService) : ControllerBase
 
     [HttpPost("forgot")]
     [AllowAnonymous]
-    public async Task<IActionResult> ForgotPassword([FromBody] EmailRequest request)
+    public async Task<IActionResult> ForgotPassword([FromBody] string email)
     {
         try
         {
-            await authService.GenerateOtp(request.Email);
+            await authService.GenerateOtp(email);
 
             return Ok();
         }
@@ -129,14 +129,7 @@ public class AuthController(IAuthService authService) : ControllerBase
     [Authorize]
     public async Task<IActionResult> Me()
     {
-        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-        if (!Guid.TryParse(userIdClaim, out var userId))
-        {
-            return Unauthorized();
-        }
-
-        return Ok(await authService.GetMeTask(userId));
+        return Ok(await authService.GetMeTask(User.GetUserId()));
     }
 
 

@@ -12,8 +12,8 @@ using Server.Repository.Context;
 namespace Server.Repository.Migrations
 {
     [DbContext(typeof(ServerDbContext))]
-    [Migration("20260615161312_AddMonitorsAndPingTables")]
-    partial class AddMonitorsAndPingTables
+    [Migration("20260616051321_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -65,6 +65,9 @@ namespace Server.Repository.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<int>("HttpStatusCodes")
+                        .HasColumnType("integer");
+
                     b.Property<int>("IntervalSeconds")
                         .HasColumnType("integer");
 
@@ -76,6 +79,9 @@ namespace Server.Repository.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("RequestBody")
                         .HasColumnType("text");
 
                     b.Property<DateTime>("UpdatedAt")

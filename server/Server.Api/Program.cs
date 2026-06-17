@@ -1,8 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using Server.Repository;
-using Server.Service;
 using System.Text;
+using Server.Api.Extensions;
 
 namespace Server.Api;
 

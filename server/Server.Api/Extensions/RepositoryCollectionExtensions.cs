@@ -1,13 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Server.Repository.Context;
 using Server.Repository.Interfaces;
 using Server.Repository.Repositories;
 
-namespace Server.Repository;
+namespace Server.Api.Extensions;
 
-public static class DependencyInjection
+public static class RepositoryCollectionExtensions
 {
     public static IServiceCollection AddRepository(
         this IServiceCollection services,
@@ -18,6 +16,7 @@ public static class DependencyInjection
                 configuration.GetConnectionString("DefaultConnection")));
 
         services.AddScoped<IAuthRepository, AuthRepository>();
+        services.AddScoped<IMonitorRepository, MonitorRepository>();
 
         return services;
     }

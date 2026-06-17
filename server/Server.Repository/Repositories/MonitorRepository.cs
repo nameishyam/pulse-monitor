@@ -1,0 +1,54 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Server.Domain.Dto.Db;
+using Server.Repository.Context;
+using Server.Repository.Interfaces;
+using Monitor = Server.Domain.Entities.Monitor;
+
+namespace Server.Repository.Repositories;
+
+public class MonitorRepository(ServerDbContext context) : IMonitorRepository
+{
+    public async Task<ICollection<Monitor>> GetAll(Guid userId)
+    {
+        return await context.Monitors
+            .Where(m => m.UserId == userId)
+            .ToListAsync();
+    }
+
+    public async Task<Monitor?> GetById(Guid id)
+    {
+        return await context.Monitors.FirstOrDefaultAsync(m => m.Id == id);
+    }
+
+    public async Task<Guid> Create(CreateMonitorDb request)
+    {
+        var monitor = new Monitor
+        {
+            UserId = request.UserId,
+            HttpMethod = request.HttpMethod,
+            IntervalSeconds = request.IntervalSeconds,
+            Name = request.Name,
+            Url = request.Url
+        };
+
+        await context.Monitors.AddAsync(monitor);
+        await context.SaveChangesAsync();
+
+        return monitor.Id;
+    }
+
+    public async Task Update(UpdateMonitorDb request)
+    {
+        var monitor = await context.Monitors
+            .FirstAsync(x => x.Id == request.Id);
+
+        monitor.IntervalSeconds = request.IntervalSeconds ?? monitor.IntervalSeconds;
+        monitor.RequestBody = request.RequestBody ?? monitor.RequestBody;
+        monitor.HttpMethod = request.HttpMethod ?? monitor.HttpMethod;
+        monitor.HttpStatusCode = request.HttpStatusCode ?? monitor.HttpStatusCode;
+        monitor.MonitorStatus = request.MonitorStatus ?? monitor.MonitorStatus;
+        monitor.LastChecked = request.LastChecked ?? monitor.LastChecked;
+
+        await context.SaveChangesAsync();
+    }
+}

@@ -6,6 +6,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Server.Domain.Dto.Options;
 using Server.Domain.Dto.Request;
+using Server.Domain.Dto.Request.Auth;
 using Server.Domain.Dto.Response;
 using Server.Domain.Entities;
 using Server.Repository.Interfaces;

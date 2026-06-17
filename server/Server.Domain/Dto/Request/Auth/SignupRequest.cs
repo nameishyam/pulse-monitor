@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Server.Domain.Dto.Request;
+namespace Server.Domain.Dto.Request.Auth;
 
 public class SignupRequest
 {
