@@ -47,8 +47,8 @@ function Navbar() {
       <div className="flex items-center gap-6 py-2">
         <Link to="/">
           <div className="flex cursor-pointer flex-row items-center gap-1 text-xl font-bold transition-opacity hover:opacity-80">
-            <span>Arena</span>
-            <span className="text-primary">AI</span>
+            <span>Pulse</span>
+            <span className="text-primary">Monitor</span>
           </div>
         </Link>
 

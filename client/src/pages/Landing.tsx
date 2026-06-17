@@ -12,41 +12,42 @@ export default function Landing() {
         <div className="mb-16 text-center">
           <h1 className="mb-6 text-5xl font-bold text-foreground">
             <div className="flex flex-row items-center justify-center gap-3">
-              <div>Arena</div> <div className="text-primary">AI</div>
+              <div>Pulse</div> <div className="text-primary">Monitor</div>
             </div>
           </h1>
           <p className="mx-auto max-w-2xl text-xl text-muted-foreground">
-            Practice Group Discussions With AI Participants
+            High-Performance, Real-Time API & Website Uptime Monitoring
           </p>
         </div>
 
-        <div className="mx-auto mb-16 grid max-w-5xl gap-6 md:grid-cols-3">
+        <div className="mx-auto mb-16 grid max-w-6xl gap-6 md:grid-cols-3">
           <div className="rounded-lg border border-border bg-card p-6 transition-colors hover:border-foreground/20">
             <h3 className="mb-3 text-lg font-semibold text-card-foreground">
-              Create Discussion Rooms
+              Monitor Any Endpoint
             </h3>
             <p className="text-muted-foreground">
-              Start discussions on any topic and configure your AI panel
+              Configure HTTP targets supporting GET, POST, PUT, and DELETE
+              methods with customizable check intervals.
             </p>
           </div>
 
           <div className="rounded-lg border border-border bg-card p-6 transition-colors hover:border-foreground/20">
             <h3 className="mb-3 text-lg font-semibold text-card-foreground">
-              Debate With AI Experts
+              Real-Time Performance Metrics
             </h3>
             <p className="text-muted-foreground">
-              Engage with AI participants having distinct personalities and
-              viewpoints
+              Track millisecond-accurate response times, status codes, and
+              network latency variations through a live interface.
             </p>
           </div>
 
           <div className="rounded-lg border border-border bg-card p-6 transition-colors hover:border-foreground/20">
             <h3 className="mb-3 text-lg font-semibold text-card-foreground">
-              Receive Feedback
+              Immediate Downtime Logs
             </h3>
             <p className="text-muted-foreground">
-              Get discussion summaries, strengths, weaknesses, and improvement
-              suggestions
+              Capture instant network connection errors, timeouts, or unexpected
+              server failures before they affect your users.
             </p>
           </div>
         </div>
@@ -55,7 +56,8 @@ export default function Landing() {
           {isAuthenticated() ? (
             <>
               <p className="mb-8 text-lg text-foreground">
-                Continue your discussion sessions or start a new one.
+                Review your current operational targets or register a new
+                monitor.
               </p>
               <div className="flex justify-center gap-4">
                 <Button
@@ -65,22 +67,14 @@ export default function Landing() {
                     navigate("/dashboard")
                   }}
                 >
-                  Dashboard
-                </Button>
-                <Button
-                  className="hover:cursor-pointer"
-                  onClick={() => {
-                    navigate("/sessions/create")
-                  }}
-                >
-                  New Session
+                  View Dashboard
                 </Button>
               </div>
             </>
           ) : (
             <>
               <p className="mb-8 text-lg text-foreground">
-                Start practicing group discussions with AI participants.
+                Start tracking your backend systems and endpoint reliability.
               </p>
               <div className="flex justify-center gap-4">
                 <Button
