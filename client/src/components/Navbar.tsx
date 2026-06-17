@@ -23,7 +23,6 @@ import {
   AlertDialogTitle,
 } from "./ui/alert-dialog"
 import { toast } from "sonner"
-import { Button } from "./ui/button"
 import { api } from "@/lib/api"
 
 function Navbar() {
@@ -50,12 +49,6 @@ function Navbar() {
             <span>Pulse</span>
             <span className="text-primary">Monitor</span>
           </div>
-        </Link>
-
-        <Link to="/reviews">
-          <Button className="h-8 hover:cursor-pointer" variant="outline">
-            Public Reviews
-          </Button>
         </Link>
       </div>
 
