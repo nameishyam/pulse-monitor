@@ -1,9 +1,8 @@
-﻿using Server.Domain.Entities;
+﻿using Server.Domain.Dto.Response;
 
 namespace Server.Domain.Interfaces.Service;
 
 public interface ILogService
 {
-    Task Create(Log log);
-    Task<ICollection<Log>> GetByMonitor(Guid monitorId);
+    Task<ICollection<GetLog>> GetByMonitor(Guid monitorId);
 }

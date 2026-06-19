@@ -1,4 +1,4 @@
-﻿using Server.Domain.Entities;
+﻿using Server.Domain.Dto.Response;
 using Server.Domain.Interfaces.Repository;
 using Server.Domain.Interfaces.Service;
 
@@ -6,13 +6,15 @@ namespace Server.Service.Services;
 
 public class LogService(ILogRepository logRepository) : ILogService
 {
-    public async Task Create(Log log)
+    public async Task<ICollection<GetLog>> GetByMonitor(Guid monitorId)
     {
-        await logRepository.Create(log);
-    }
-
-    public async Task<ICollection<Log>> GetByMonitor(Guid monitorId)
-    {
-        return await logRepository.GetByMonitor(monitorId);
+        return (await logRepository.GetByMonitor(monitorId)).Select(l => new GetLog
+        {
+            ResponseTime = l.ResponseTime,
+            ErrorMessage = l.ErrorMessage,
+            StatusCode = l.StatusCode,
+            CreatedAt = l.CreatedAt
+        })
+        .ToList();
     }
 }

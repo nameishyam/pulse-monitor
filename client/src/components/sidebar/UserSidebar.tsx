@@ -24,7 +24,6 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar"
-import { useAuth } from "@/context/AuthContext"
 import { api } from "@/lib/api"
 import {
   ChevronsUpDownIcon,
@@ -36,10 +35,15 @@ import {
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { toast } from "sonner"
+import type { User } from "@/lib/types"
 
-export function UserSidebar() {
+interface UserSidebarProps {
+  user: User | null
+  logout: () => Promise<void>
+}
+
+export function UserSidebar({ user, logout }: UserSidebarProps) {
   const { isMobile } = useSidebar()
-  const { user, logout } = useAuth()
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const navigate = useNavigate()
 

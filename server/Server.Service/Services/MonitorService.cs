@@ -19,9 +19,24 @@ public class MonitorService(
     IMonitorChecker monitorChecker,
     ILogger<MonitorService> logger) : IMonitorService
 {
-    public async Task<ICollection<Monitor>> GetAll(Guid userId)
+    public async Task<GetMonitor> GetById(Guid monitorId)
     {
-        return await monitorRepository.GetAll(userId);
+        if (!await monitorRepository.ExistsById(monitorId))
+        {
+            throw new NotFoundException("monitor with the given id not found");
+        }
+
+        var monitor = await monitorRepository.GetById(monitorId);
+
+        return new GetMonitor
+        {
+            Id = monitorId,
+            Name = monitor.Name,
+            Url = monitor.Url,
+            IntervalSeconds = monitor.IntervalSeconds,
+            LastChecked = monitor.LastChecked,
+            MonitorStatus = monitor.MonitorStatus
+        };
     }
 
     public async Task<GetMonitor> Create(MonitorCreate request, Guid userId)

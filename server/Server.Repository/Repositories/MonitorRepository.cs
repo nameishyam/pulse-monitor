@@ -17,7 +17,9 @@ public class MonitorRepository(ServerDbContext context) : IMonitorRepository
 
     public async Task<Monitor> GetById(Guid id)
     {
-        return await context.Monitors.FirstAsync(m => m.Id == id);
+        return await context.Monitors
+            .Include(m => m.Logs)
+            .FirstAsync(m => m.Id == id);
     }
 
     public async Task<Guid> Create(CreateMonitor request)

@@ -1,3 +1,5 @@
+import type { Dispatch, SetStateAction } from "react"
+
 export interface User {
   firstName?: string
   lastName?: string
@@ -12,14 +14,22 @@ export interface Monitor {
   requestBody: string
   httpMethod: string
   status: "up" | "down" | "unknown"
+  logs: Log[]
   lastCheckedAt: string
+}
+
+export interface Log {
+  responseTime?: number
+  statusCode?: number
+  errorMessage?: string
+  createdAt?: string
 }
 
 export interface AuthContextType {
   user: User | null
   monitors: Monitor[]
-  setUser: React.Dispatch<React.SetStateAction<User | null>>
-  setMonitors: React.Dispatch<React.SetStateAction<Monitor[]>>
+  setUser: Dispatch<SetStateAction<User | null>>
+  setMonitors: Dispatch<SetStateAction<Monitor[]>>
   updateUser: (updates: Partial<User>) => void
   login: () => Promise<void>
   logout: () => Promise<void>

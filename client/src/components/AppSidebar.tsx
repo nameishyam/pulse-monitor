@@ -8,11 +8,30 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar"
 import { Button } from "./ui/button"
-import { useState } from "react"
+import {
+  useState,
+  type ComponentProps,
+  type Dispatch,
+  type SetStateAction,
+} from "react"
 import AddMonitor from "./sidebar/AddMonitor"
 import { PlusIcon } from "lucide-react"
+import type { Monitor, User } from "@/lib/types"
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+interface AppSidebarProps extends ComponentProps<typeof Sidebar> {
+  user: User | null
+  monitors: Monitor[]
+  logout: () => Promise<void>
+  setMonitor: Dispatch<SetStateAction<Monitor | null>>
+}
+
+export function AppSidebar({
+  user,
+  monitors,
+  logout,
+  setMonitor,
+  ...props
+}: AppSidebarProps) {
   const [isOpen, setIsOpen] = useState<boolean>(false)
 
   return (
@@ -22,18 +41,24 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           onClick={() => {
             setIsOpen(!isOpen)
           }}
+          className="justify-start group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0"
         >
-          <PlusIcon className="mr-2" />
-          Add Monitor
+          <PlusIcon className="mr-2 group-data-[collapsible=icon]:mr-0" />
+          <span className="group-data-[collapsible=icon]:hidden">
+            Add Monitor
+          </span>
         </Button>
         {isOpen && <AddMonitor open={isOpen} onOpenChange={setIsOpen} />}
       </SidebarHeader>
+
       <SidebarContent>
-        <UserMonitors />
+        <UserMonitors monitors={monitors} setMonitor={setMonitor} />
       </SidebarContent>
+
       <SidebarFooter>
-        <UserSidebar />
+        <UserSidebar user={user} logout={logout} />
       </SidebarFooter>
+
       <SidebarRail />
     </Sidebar>
   )
