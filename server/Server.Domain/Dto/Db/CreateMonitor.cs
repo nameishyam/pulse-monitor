@@ -1,8 +1,6 @@
-﻿using Server.Domain.Enums;
+﻿namespace Server.Domain.Dto.Db;
 
-namespace Server.Domain.Dto.Db;
-
-public class CreateMonitorDb
+public class CreateMonitor
 {
     public Guid UserId { get; set; }
     public string Name { get; set; } = string.Empty;

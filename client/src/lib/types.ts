@@ -2,9 +2,6 @@ export interface User {
   firstName?: string
   lastName?: string
   email?: string
-  bio?: string
-  profileUrl?: string
-  createdAt?: string
 }
 
 export interface Monitor {

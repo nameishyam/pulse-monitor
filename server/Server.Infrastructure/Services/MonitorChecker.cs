@@ -8,7 +8,7 @@ namespace Server.Infrastructure.Services;
 public class MonitorChecker(IHttpClientFactory httpClientFactory)
     : IMonitorChecker
 {
-    public async Task<MonitorCheckResult> CheckAsync(
+    public async Task<MonitorCheck> CheckAsync(
         Monitor monitor,
         CancellationToken cancellationToken)
     {
@@ -26,7 +26,7 @@ public class MonitorChecker(IHttpClientFactory httpClientFactory)
 
             stopwatch.Stop();
 
-            return new MonitorCheckResult
+            return new MonitorCheck
             {
                 IsSuccess = response.IsSuccessStatusCode,
                 StatusCode = (int)response.StatusCode,
@@ -35,7 +35,7 @@ public class MonitorChecker(IHttpClientFactory httpClientFactory)
         }
         catch (Exception ex)
         {
-            return new MonitorCheckResult
+            return new MonitorCheck
             {
                 IsSuccess = false,
                 ErrorMessage = ex.Message

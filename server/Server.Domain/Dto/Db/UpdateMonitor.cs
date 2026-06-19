@@ -1,10 +1,12 @@
 ﻿using Server.Domain.Enums;
 
-namespace Server.Domain.Dto.Request.Update;
+namespace Server.Domain.Dto.Db;
 
-public class MonitorUpdateRequest
+public class UpdateMonitor
 {
+    public Guid Id { get; set; }
     public int? IntervalSeconds { get; set; }
     public MonitorStatus? MonitorStatus { get; set; }
+    public DateTime? NextChecked { get; set; }
     public DateTime? LastChecked { get; set; }
 }

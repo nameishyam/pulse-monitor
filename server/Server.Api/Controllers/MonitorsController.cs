@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Server.Api.Extensions;
-using Server.Domain.Dto.Request;
+using Server.Domain.Dto.Request.Create;
 using Server.Domain.Dto.Request.Update;
 using Server.Domain.Interfaces.Service;
 
@@ -19,13 +19,13 @@ public class MonitorsController(IMonitorService monitorService) : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] MonitorCreateRequest request)
+    public async Task<IActionResult> Create([FromBody] MonitorCreate request)
     {
         return Ok(await monitorService.Create(request, User.GetUserId()));
     }
 
     [HttpPatch("{id:guid}")]
-    public async Task<IActionResult> Update([FromBody] MonitorUpdateRequest request, [FromRoute] Guid id)
+    public async Task<IActionResult> Update([FromBody] MonitorUpdate request, [FromRoute] Guid id)
     {
         await monitorService.Update(request, id);
 

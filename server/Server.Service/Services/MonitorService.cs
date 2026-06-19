@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using Server.Domain.Dto.Db;
-using Server.Domain.Dto.Request;
+using Server.Domain.Dto.Request.Create;
 using Server.Domain.Dto.Request.Update;
 using Server.Domain.Dto.Response;
 using Server.Domain.Entities;
@@ -24,7 +24,7 @@ public class MonitorService(
         return await monitorRepository.GetAll(userId);
     }
 
-    public async Task<MonitorResponse> Create(MonitorCreateRequest request, Guid userId)
+    public async Task<GetMonitor> Create(MonitorCreate request, Guid userId)
     {
         if (string.IsNullOrWhiteSpace(request.Name))
         {
@@ -36,7 +36,7 @@ public class MonitorService(
             throw new InvalidDetailsException("url is invalid");
         }
 
-        var monitorId = await monitorRepository.Create(new CreateMonitorDb
+        var monitorId = await monitorRepository.Create(new CreateMonitor
         {
             UserId = userId,
             IntervalSeconds = request.IntervalSeconds,
@@ -51,7 +51,7 @@ public class MonitorService(
 
         var monitor = await monitorRepository.GetById(monitorId);
 
-        return new MonitorResponse
+        return new GetMonitor
         {
             Id = monitorId,
             IntervalSeconds = monitor.IntervalSeconds,
@@ -62,14 +62,14 @@ public class MonitorService(
         };
     }
 
-    public async Task Update(MonitorUpdateRequest request, Guid id)
+    public async Task Update(MonitorUpdate request, Guid id)
     {
         if (!await monitorRepository.ExistsById(id))
         { 
             throw new NotFoundException($"monitor with the id {id} not found");
         }
 
-        await monitorRepository.Update(new UpdateMonitorDb
+        await monitorRepository.Update(new UpdateMonitor
         {
             Id = id,
             IntervalSeconds = request.IntervalSeconds,
@@ -88,7 +88,7 @@ public class MonitorService(
                 monitor,
                 cancellationToken);
 
-            await monitorRepository.Update(new UpdateMonitorDb
+            await monitorRepository.Update(new UpdateMonitor
             {
                 Id = monitor.Id,
                 MonitorStatus = result.IsSuccess

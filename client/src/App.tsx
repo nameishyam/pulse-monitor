@@ -8,7 +8,6 @@ import ProtectedRoute from "@/routes/ProtectedRoute"
 import Dashboard from "@/pages/Dashboard"
 import Login from "@/pages/Login"
 import Landing from "@/pages/Landing"
-import Profile from "./pages/Profile"
 import { TooltipProvider } from "./components/ui/tooltip"
 import DashboardLayout from "./layout/DashboardLayout"
 import PublicLayout from "./layout/PublicLayout"
@@ -30,7 +29,6 @@ export default function App() {
               <Route element={<ProtectedRoute />}>
                 <Route element={<DashboardLayout />}>
                   <Route path="dashboard" element={<Dashboard />} />
-                  <Route path="profile" element={<Profile />} />
                 </Route>
               </Route>
             </Routes>

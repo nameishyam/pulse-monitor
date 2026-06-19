@@ -15,7 +15,7 @@ public class AuthController(IAuthService authService) : ControllerBase
 
     [HttpPost("signup")]
     [AllowAnonymous]
-    public async Task<IActionResult> Signup([FromBody] SignupRequest request)
+    public async Task<IActionResult> Signup([FromBody] UserSignup request)
     {
         try
         {
@@ -39,7 +39,7 @@ public class AuthController(IAuthService authService) : ControllerBase
 
     [HttpPost("login")]
     [AllowAnonymous]
-    public async Task<IActionResult> Login([FromBody] LoginRequest request)
+    public async Task<IActionResult> Login([FromBody] UserLogin request)
     {
         try
         {
@@ -83,7 +83,7 @@ public class AuthController(IAuthService authService) : ControllerBase
 
     [HttpPost("verify")]
     [AllowAnonymous]
-    public async Task<IActionResult> VerifyUser([FromBody] VerifyRequest request)
+    public async Task<IActionResult> VerifyUser([FromBody] VerifyOtp request)
     {
         try
         {
@@ -107,7 +107,7 @@ public class AuthController(IAuthService authService) : ControllerBase
 
     [HttpPatch("reset")]
     [AllowAnonymous]
-    public async Task<IActionResult> ResetPassword([FromBody] ResetRequest request)
+    public async Task<IActionResult> ResetPassword([FromBody] ResetPassword request)
     {
         try
         {

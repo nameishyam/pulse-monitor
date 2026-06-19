@@ -8,12 +8,8 @@ public static class ClaimsPrincipalExtensions
     {
         var userId = user.FindFirstValue(ClaimTypes.NameIdentifier);
 
-        if (string.IsNullOrWhiteSpace(userId))
-        {
-            throw new UnauthorizedAccessException(
-                "User ID claim not found.");
-        }
-
-        return Guid.Parse(userId);
+        return string.IsNullOrWhiteSpace(userId) 
+            ? throw new UnauthorizedAccessException("User ID claim not found.") 
+            : Guid.Parse(userId);
     }
 }

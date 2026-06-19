@@ -20,7 +20,7 @@ public class MonitorRepository(ServerDbContext context) : IMonitorRepository
         return await context.Monitors.FirstAsync(m => m.Id == id);
     }
 
-    public async Task<Guid> Create(CreateMonitorDb request)
+    public async Task<Guid> Create(CreateMonitor request)
     {
         var monitor = new Monitor
         {
@@ -36,7 +36,7 @@ public class MonitorRepository(ServerDbContext context) : IMonitorRepository
         return monitor.Id;
     }
 
-    public async Task Update(UpdateMonitorDb request)
+    public async Task Update(UpdateMonitor request)
     {
         var monitor = await context.Monitors
             .FirstAsync(x => x.Id == request.Id);

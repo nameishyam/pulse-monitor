@@ -5,5 +5,5 @@ namespace Server.Domain.Interfaces.Infrastructure;
 
 public interface IMonitorChecker
 {
-    Task<MonitorCheckResult> CheckAsync(Monitor monitor, CancellationToken cancellationToken);
+    Task<MonitorCheck> CheckAsync(Monitor monitor, CancellationToken cancellationToken);
 }

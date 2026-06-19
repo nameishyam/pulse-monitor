@@ -2,7 +2,7 @@
 
 namespace Server.Domain.Dto.Response;
 
-public class MonitorResponse
+public class GetMonitor
 {
     public Guid Id { get; init; }
     public string Name { get; init; } = string.Empty;

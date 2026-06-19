@@ -2,7 +2,7 @@
 
 namespace Server.Domain.Dto.Request.Auth;
 
-public class LoginRequest
+public class ResetPassword
 {
     [Required] public string Email { get; set; } = string.Empty;
     [Required] public string Password { get; set; } = string.Empty;

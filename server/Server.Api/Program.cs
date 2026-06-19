@@ -5,8 +5,6 @@ using Server.Infrastructure.Services;
 using Server.Infrastructure.Workers;
 using System.Text;
 using Server.Domain.Interfaces.Infrastructure;
-using Supabase;
-using SupabaseOptions = Server.Domain.Dto.Options.SupabaseOptions;
 
 namespace Server.Api;
 
@@ -63,26 +61,6 @@ public static class Program
                     .AllowAnyMethod()
                     .AllowCredentials();
             });
-        });
-
-        builder.Services.Configure<SupabaseOptions>(
-            builder.Configuration.GetSection("Supabase"));
-
-        builder.Services.AddSingleton<Client>(_ =>
-        {
-            var options = builder.Configuration
-                .GetSection("Supabase")
-                .Get<SupabaseOptions>();
-
-            var client = new Client(
-                options!.Url,
-                options.Key);
-
-            client.InitializeAsync()
-                .GetAwaiter()
-                .GetResult();
-
-            return client;
         });
 
         builder.Services.AddRepository(builder.Configuration);

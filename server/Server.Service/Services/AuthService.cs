@@ -20,7 +20,7 @@ public class AuthService(
     IEmailService emailService)
     : IAuthService
 {
-    public async Task<string> SignupTask(SignupRequest request)
+    public async Task<string> SignupTask(UserSignup request)
     {
         if (await userRepository.ExistsByEmail(request.Email))
         {
@@ -43,7 +43,7 @@ public class AuthService(
         return GenerateToken(user);
     }
 
-    public async Task<string> LoginTask(LoginRequest request)
+    public async Task<string> LoginTask(UserLogin request)
     {
         if (!await userRepository.ExistsByEmail(request.Email))
         {
@@ -73,7 +73,7 @@ public class AuthService(
             $"Your OTP to reset password: {user.Otp}");
     }
 
-    public async Task VerifyUser(VerifyRequest request)
+    public async Task VerifyUser(VerifyOtp request)
     {
         var user = await userRepository.GetByEmail(request.Email);
         if (user == null)
@@ -94,7 +94,7 @@ public class AuthService(
         await userRepository.ClearOtp(user.Id);
     }
 
-    public async Task ResetUserPassword(ResetRequest request)
+    public async Task ResetUserPassword(ResetPassword request)
     {
         var user = await userRepository.GetByEmail(request.Email);
 
@@ -103,7 +103,7 @@ public class AuthService(
         await userRepository.Update(user);
     }
 
-    public async Task<GetMeResponse> GetMeTask(Guid userId)
+    public async Task<GetMe> GetMeTask(Guid userId)
     {
         var user = await userRepository.GetById(userId);
 
@@ -112,19 +112,16 @@ public class AuthService(
             throw new NotFoundException("User not found");
         }
 
-        return new GetMeResponse
+        return new GetMe
         {
-            User = new UserResponse
+            User = new GetUser
             {
                 FirstName = user.FirstName,
                 LastName = user.LastName,
-                Email = user.Email,
-                Bio = user.Bio,
-                ProfileUrl = user.ProfileUrl,
-                CreatedAt = user.CreatedAt
+                Email = user.Email
             },
             Monitors = user.Monitors
-                .Select(m => new MonitorResponse
+                .Select(m => new GetMonitor
                 {
                     Id = m.Id,
                     Name = m.Name,

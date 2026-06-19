@@ -2,7 +2,7 @@
 
 namespace Server.Domain.Dto.Request.Auth;
 
-public class SignupRequest
+public class UserSignup
 {
     [Required] public string FirstName { get; set; } = string.Empty;
     [Required] public string LastName { get; set; } = string.Empty;

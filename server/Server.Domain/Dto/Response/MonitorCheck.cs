@@ -1,6 +1,6 @@
 ﻿namespace Server.Domain.Dto.Response;
 
-public class MonitorCheckResult
+public class MonitorCheck
 {
     public bool IsSuccess { get; set; }
     public int? StatusCode { get; set; }

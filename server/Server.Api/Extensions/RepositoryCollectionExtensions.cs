@@ -24,7 +24,6 @@ public static class RepositoryCollectionExtensions
         services.AddScoped<IAuthRepository, AuthRepository>();
         services.AddScoped<IMonitorRepository, MonitorRepository>(); 
         services.AddScoped<ILogRepository, LogRepository>();
-        services.AddScoped<IUserRepository, UserRepository>();
 
         return services;
     }

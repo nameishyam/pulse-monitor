@@ -7,8 +7,8 @@ public interface IMonitorRepository
 {
     Task<ICollection<Monitor>> GetAll(Guid userId);
     Task<Monitor> GetById(Guid id);
-    Task<Guid> Create(CreateMonitorDb request);
-    Task Update(UpdateMonitorDb request);
+    Task<Guid> Create(CreateMonitor request);
+    Task Update(UpdateMonitor request);
     Task<ICollection<Monitor>> GetPendingMonitors();
     Task<bool> ExistsById(Guid monitorId);
 }
