@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Server.Api.Extensions;
 using Server.Domain.Dto.Request;
 using Server.Domain.Dto.Request.Update;
-using Server.Service.Interfaces;
+using Server.Domain.Interfaces.Service;
 
 namespace Server.Api.Controllers;
 

@@ -11,7 +11,6 @@ public class Monitor : BaseEntity
     public string? RequestBody { get; set; }
     public HttpMethods HttpMethod { get; set; } = HttpMethods.Get;
 
-    public int? HttpStatusCode { get; set; }
     public MonitorStatus MonitorStatus { get; set; } = MonitorStatus.Pending;
     public DateTime? LastChecked { get; set; }
     public DateTime NextChecked { get; set; }

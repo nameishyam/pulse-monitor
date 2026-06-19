@@ -3,8 +3,10 @@ using Microsoft.IdentityModel.Tokens;
 using Server.Api.Extensions;
 using Server.Infrastructure.Services;
 using Server.Infrastructure.Workers;
-using Server.Service.Interfaces;
 using System.Text;
+using Server.Domain.Interfaces.Infrastructure;
+using Supabase;
+using SupabaseOptions = Server.Domain.Dto.Options.SupabaseOptions;
 
 namespace Server.Api;
 
@@ -63,6 +65,26 @@ public static class Program
             });
         });
 
+        builder.Services.Configure<SupabaseOptions>(
+            builder.Configuration.GetSection("Supabase"));
+
+        builder.Services.AddSingleton<Client>(_ =>
+        {
+            var options = builder.Configuration
+                .GetSection("Supabase")
+                .Get<SupabaseOptions>();
+
+            var client = new Client(
+                options!.Url,
+                options.Key);
+
+            client.InitializeAsync()
+                .GetAwaiter()
+                .GetResult();
+
+            return client;
+        });
+
         builder.Services.AddRepository(builder.Configuration);
         builder.Services.AddService(builder.Configuration);
 
@@ -71,7 +93,26 @@ public static class Program
 
         builder.Services.AddHostedService<MonitorWorker>();
 
+        builder.Logging.AddFilter(
+            "Microsoft.EntityFrameworkCore.Database.Command",
+            LogLevel.Warning);
+
         var app = builder.Build();
+
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseDeveloperExceptionPage();
+        }
+
+        app.Use(async (context, next) =>
+        {
+            if (context.Request.Path == "/")
+            {
+                await context.Response.WriteAsync("imdb api application");
+                return;
+            }
+            await next();
+        });
 
         app.UseHttpsRedirection();
 

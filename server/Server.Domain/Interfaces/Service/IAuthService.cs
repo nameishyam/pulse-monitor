@@ -1,8 +1,7 @@
-﻿using Server.Domain.Dto.Request;
-using Server.Domain.Dto.Request.Auth;
+﻿using Server.Domain.Dto.Request.Auth;
 using Server.Domain.Dto.Response;
 
-namespace Server.Service.Interfaces;
+namespace Server.Domain.Interfaces.Service;
 
 public interface IAuthService
 {

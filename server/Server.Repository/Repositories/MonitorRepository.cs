@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Server.Domain.Dto.Db;
+using Server.Domain.Interfaces.Repository;
 using Server.Repository.Context;
-using Server.Repository.Interfaces;
 using Monitor = Server.Domain.Entities.Monitor;
 
 namespace Server.Repository.Repositories;
@@ -15,9 +15,9 @@ public class MonitorRepository(ServerDbContext context) : IMonitorRepository
             .ToListAsync();
     }
 
-    public async Task<Monitor?> GetById(Guid id)
+    public async Task<Monitor> GetById(Guid id)
     {
-        return await context.Monitors.FirstOrDefaultAsync(m => m.Id == id);
+        return await context.Monitors.FirstAsync(m => m.Id == id);
     }
 
     public async Task<Guid> Create(CreateMonitorDb request)
@@ -45,7 +45,6 @@ public class MonitorRepository(ServerDbContext context) : IMonitorRepository
         monitor.IntervalSeconds = request.IntervalSeconds ?? monitor.IntervalSeconds;
         monitor.RequestBody = request.RequestBody ?? monitor.RequestBody;
         monitor.HttpMethod = request.HttpMethod ?? monitor.HttpMethod;
-        monitor.HttpStatusCode = request.HttpStatusCode ?? monitor.HttpStatusCode;
         monitor.MonitorStatus = request.MonitorStatus ?? monitor.MonitorStatus;
         monitor.LastChecked = request.LastChecked ?? monitor.LastChecked;
         monitor.NextChecked = request.NextChecked ?? monitor.NextChecked;
@@ -58,5 +57,10 @@ public class MonitorRepository(ServerDbContext context) : IMonitorRepository
         return await context.Monitors
             .Where(x => x.NextChecked <= DateTime.UtcNow)
             .ToListAsync();
+    }
+
+    public async Task<bool> ExistsById(Guid monitorId)
+    {
+        return await context.Monitors.AnyAsync(m => m.Id == monitorId);
     }
 }

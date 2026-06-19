@@ -17,7 +17,7 @@ namespace Server.Repository.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.8")
+                .HasAnnotation("ProductVersion", "10.0.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -65,9 +65,6 @@ namespace Server.Repository.Migrations
                     b.Property<int>("HttpMethod")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("HttpStatusCode")
-                        .HasColumnType("integer");
-
                     b.Property<int>("IntervalSeconds")
                         .HasColumnType("integer");
 
@@ -110,6 +107,10 @@ namespace Server.Repository.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<string>("Bio")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -132,6 +133,10 @@ namespace Server.Repository.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("ProfileUrl")
                         .IsRequired()
                         .HasColumnType("text");
 

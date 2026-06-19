@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Server.Service.Interfaces;
+using Server.Domain.Interfaces.Service;
 
 namespace Server.Infrastructure.Workers;
 
@@ -12,7 +12,7 @@ public class MonitorWorker(
 {
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        logger.LogInformation("Monitor Worker started at {Time}", DateTime.UtcNow);
+        logger.LogInformation("Monitor Worker started.");
 
         while (!stoppingToken.IsCancellationRequested)
         {
@@ -23,20 +23,14 @@ public class MonitorWorker(
                 var monitorService =
                     scope.ServiceProvider.GetRequiredService<IMonitorService>();
 
-                logger.LogInformation("Checking pending monitors...");
-
                 await monitorService.ProcessPendingMonitors(stoppingToken);
-
-                logger.LogInformation("Completed monitor check cycle.");
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "Error occurred while processing monitors.");
+                logger.LogError(ex, "Background worker failed.");
             }
 
             await Task.Delay(TimeSpan.FromSeconds(1), stoppingToken);
         }
-
-        logger.LogInformation("Monitor Worker stopped.");
     }
 }

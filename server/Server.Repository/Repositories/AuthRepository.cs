@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Server.Domain.Entities;
+using Server.Domain.Interfaces.Repository;
 using Server.Repository.Context;
-using Server.Repository.Interfaces;
 
 namespace Server.Repository.Repositories;
 
@@ -48,6 +48,8 @@ public class AuthRepository(ServerDbContext context) : IAuthRepository
 
     public async Task<User?> GetById(Guid id)
     {
-        return await context.Users.FirstOrDefaultAsync(u => u.Id == id);
+        return await context.Users
+            .Include(u => u.Monitors)
+            .FirstOrDefaultAsync(u => u.Id == id);
     }
 }

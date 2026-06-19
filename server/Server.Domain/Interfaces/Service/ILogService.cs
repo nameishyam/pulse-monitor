@@ -1,8 +1,8 @@
 ﻿using Server.Domain.Entities;
 
-namespace Server.Repository.Interfaces;
+namespace Server.Domain.Interfaces.Service;
 
-public interface ILogRepository
+public interface ILogService
 {
     Task Create(Log log);
     Task<ICollection<Log>> GetByMonitor(Guid monitorId);

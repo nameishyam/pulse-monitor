@@ -2,11 +2,13 @@
 using Server.Domain.Dto.Db;
 using Server.Domain.Dto.Request;
 using Server.Domain.Dto.Request.Update;
+using Server.Domain.Dto.Response;
 using Server.Domain.Entities;
 using Server.Domain.Enums;
-using Server.Repository.Interfaces;
+using Server.Domain.Interfaces.Infrastructure;
+using Server.Domain.Interfaces.Repository;
+using Server.Domain.Interfaces.Service;
 using Server.Service.Exceptions;
-using Server.Service.Interfaces;
 using Monitor = Server.Domain.Entities.Monitor;
 
 namespace Server.Service.Services;
@@ -22,7 +24,7 @@ public class MonitorService(
         return await monitorRepository.GetAll(userId);
     }
 
-    public async Task<Guid> Create(MonitorCreateRequest request, Guid userId)
+    public async Task<MonitorResponse> Create(MonitorCreateRequest request, Guid userId)
     {
         if (string.IsNullOrWhiteSpace(request.Name))
         {
@@ -42,7 +44,7 @@ public class MonitorService(
             throw new InvalidDetailsException("Invalid HTTP method.");
         }
 
-        return await monitorRepository.Create(new CreateMonitorDb
+        var monitorId = await monitorRepository.Create(new CreateMonitorDb
         {
             UserId = userId,
             IntervalSeconds = request.IntervalSeconds,
@@ -51,11 +53,30 @@ public class MonitorService(
             RequestBody = request.RequestBody,
             HttpMethod = httpMethod
         });
+
+        if (!await monitorRepository.ExistsById(monitorId))
+        {
+            throw new NotFoundException("monitor with the details not found");
+        }
+
+        var monitor = await monitorRepository.GetById(monitorId);
+
+        return new MonitorResponse
+        {
+            HttpMethod = monitor.HttpMethod,
+            Id = monitorId,
+            IntervalSeconds = monitor.IntervalSeconds,
+            Name = monitor.Name,
+            MonitorStatus = monitor.MonitorStatus,
+            Url = monitor.Url,
+            RequestBody = monitor.RequestBody,
+            LastChecked = monitor.LastChecked
+        };
     }
 
     public async Task Update(MonitorUpdateRequest request, Guid id)
     {
-        if (await monitorRepository.GetById(id) == null)
+        if (!await monitorRepository.ExistsById(id))
         { 
             throw new NotFoundException($"monitor with the id {id} not found");
         }
@@ -72,7 +93,6 @@ public class MonitorService(
         {
             Id = id,
             HttpMethod = httpMethod,
-            HttpStatusCode = request.HttpStatusCode,
             IntervalSeconds = request.IntervalSeconds,
             LastChecked = request.LastChecked,
             MonitorStatus = request.MonitorStatus,
@@ -84,30 +104,15 @@ public class MonitorService(
     {
         var monitors = await monitorRepository.GetPendingMonitors();
 
-        logger.LogInformation("Found {Count} monitor(s) to process.", monitors.Count);
-
         foreach (var monitor in monitors)
         {
-            logger.LogInformation(
-                "Checking Monitor: {MonitorName} ({MonitorId}) - {Url}",
-                monitor.Name,
-                monitor.Id,
-                monitor.Url);
-
             var result = await monitorChecker.CheckAsync(
                 monitor,
                 cancellationToken);
 
-            logger.LogInformation(
-                "Status: {Status}, StatusCode: {StatusCode}, ResponseTime: {ResponseTime} ms",
-                result.IsSuccess ? "UP" : "DOWN",
-                result.StatusCode,
-                result.ResponseTime);
-
             await monitorRepository.Update(new UpdateMonitorDb
             {
                 Id = monitor.Id,
-                HttpStatusCode = result.StatusCode,
                 MonitorStatus = result.IsSuccess
                     ? MonitorStatus.Up
                     : MonitorStatus.Down,
@@ -124,8 +129,14 @@ public class MonitorService(
             });
 
             logger.LogInformation(
-                "Database updated and log inserted for monitor {MonitorId}",
-                monitor.Id);
+                "[{Time}] {Name} ({Method} {Url}) => {Status} ({StatusCode}) | {ResponseTime} ms",
+                DateTime.UtcNow,
+                monitor.Name,
+                monitor.HttpMethod,
+                monitor.Url,
+                result.IsSuccess ? "UP" : "DOWN",
+                result.StatusCode,
+                result.ResponseTime);
         }
     }
 }

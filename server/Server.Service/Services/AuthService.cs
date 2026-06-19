@@ -5,13 +5,12 @@ using System.Text;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Server.Domain.Dto.Options;
-using Server.Domain.Dto.Request;
 using Server.Domain.Dto.Request.Auth;
 using Server.Domain.Dto.Response;
 using Server.Domain.Entities;
-using Server.Repository.Interfaces;
+using Server.Domain.Interfaces.Repository;
+using Server.Domain.Interfaces.Service;
 using Server.Service.Exceptions;
-using Server.Service.Interfaces;
 
 namespace Server.Service.Services;
 
@@ -115,10 +114,27 @@ public class AuthService(
 
         return new GetMeResponse
         {
-            FirstName = user.FirstName!,
-            LastName = user.LastName!,
-            Email = user.Email!,
-            CreatedAt = user.CreatedAt
+            User = new UserResponse
+            {
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                Bio = user.Bio,
+                ProfileUrl = user.ProfileUrl
+            },
+            Monitors = user.Monitors
+                .Select(m => new MonitorResponse
+                {
+                    Id = m.Id,
+                    Name = m.Name,
+                    Url = m.Url,
+                    IntervalSeconds = m.IntervalSeconds,
+                    RequestBody = m.RequestBody,
+                    HttpMethod = m.HttpMethod,
+                    MonitorStatus = m.MonitorStatus,
+                    LastChecked = m.LastChecked
+                })
+                .ToList()
         };
     }
 
@@ -127,7 +143,7 @@ public class AuthService(
         var claims = new List<Claim>
         {
             new(ClaimTypes.NameIdentifier, user.Id.ToString()),
-            new(JwtRegisteredClaimNames.Email, user.Email!)
+            new(JwtRegisteredClaimNames.Email, user.Email)
         };
 
         var key = new SymmetricSecurityKey(

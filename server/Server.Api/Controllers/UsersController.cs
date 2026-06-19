@@ -1,24 +1,41 @@
-﻿using System.Security.Claims;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Server.Service.Interfaces;
+using Server.Service.Exceptions;
+using Server.Api.Extensions;
+using Server.Domain.Dto.Request.Update;
+using Server.Domain.Interfaces.Service;
 
 namespace Server.Api.Controllers;
 
 [Authorize]
 [Route("api/v1/[controller]")]
-public class UsersController() : Controller
+public class UsersController(IUserService userService) : Controller
 {
-    [HttpPatch("{id:int}")]
-    public async Task<IActionResult> UploadProfile([FromBody] Stream fileData, [FromRoute] int id)
+    [HttpPatch("profile")]
+    public async Task<IActionResult> UploadProfile([FromBody] IFormFile fileData)
     {
-        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        
-        if (!Guid.TryParse(userIdClaim, out var userId))
+        try
         {
-            return Unauthorized();
+            return Ok(await userService.Upload(fileData, User.GetUserId()));
         }
-        
-        return Ok();
+        catch (InvalidDetailsException e)
+        {
+            return BadRequest(e.Message);
+        }
+    }
+
+    [HttpPatch]
+    public async Task<IActionResult> Update([FromBody] UserUpdateRequest request)
+    {
+        try
+        {
+            await userService.Update(request, User.GetUserId());
+
+            return Ok();
+        }
+        catch (NotFoundException e)
+        {
+            return NotFound(e.Message);
+        }
     }
 }

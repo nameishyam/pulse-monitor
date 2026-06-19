@@ -2,8 +2,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Server.Api.Extensions;
 using Server.Domain.Dto.Request.Auth;
+using Server.Domain.Interfaces.Service;
 using Server.Service.Exceptions;
-using Server.Service.Interfaces;
 
 namespace Server.Api.Controllers;
 

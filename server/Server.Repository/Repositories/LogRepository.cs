@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Server.Domain.Entities;
+using Server.Domain.Interfaces.Repository;
 using Server.Repository.Context;
-using Server.Repository.Interfaces;
 
 namespace Server.Repository.Repositories;
 

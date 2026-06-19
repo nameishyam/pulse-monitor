@@ -2,8 +2,7 @@
 
 public class GetMeResponse
 {
-    public string FirstName { get; set; } = string.Empty;
-    public string LastName { get; set; } = string.Empty;
-    public string Email { get; set; } = string.Empty;
-    public DateTime CreatedAt { get; set; }
+    public UserResponse User { get; init; } = null!;
+    public ICollection<MonitorResponse> Monitors { get; init; }
+        = new List<MonitorResponse>();
 }

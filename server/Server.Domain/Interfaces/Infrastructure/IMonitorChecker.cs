@@ -1,7 +1,7 @@
 ﻿using Server.Domain.Dto.Response;
 using Monitor = Server.Domain.Entities.Monitor;
 
-namespace Server.Service.Interfaces;
+namespace Server.Domain.Interfaces.Infrastructure;
 
 public interface IMonitorChecker
 {

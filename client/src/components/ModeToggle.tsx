@@ -1,4 +1,4 @@
-import { Moon, Sun } from "lucide-react"
+import { ComputerIcon, Moon, Sun, SunIcon } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -25,18 +25,21 @@ export default function ModeToggle() {
           onClick={() => setTheme("light")}
           className="hover:cursor-pointer"
         >
+          <SunIcon className="mr-2 h-4 w-4" />
           Light
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={() => setTheme("dark")}
           className="hover:cursor-pointer"
         >
+          <Moon className="mr-2 h-4 w-4" />
           Dark
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={() => setTheme("system")}
           className="hover:cursor-pointer"
         >
+          <ComputerIcon className="mr-2 h-4 w-4" />
           System
         </DropdownMenuItem>
       </DropdownMenuContent>

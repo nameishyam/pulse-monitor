@@ -1,6 +1,6 @@
 ﻿using Server.Domain.Entities;
 
-namespace Server.Repository.Interfaces;
+namespace Server.Domain.Interfaces.Repository;
 
 public interface IAuthRepository
 {

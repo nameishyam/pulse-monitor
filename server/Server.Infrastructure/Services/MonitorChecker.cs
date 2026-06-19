@@ -1,7 +1,7 @@
 ﻿using Server.Domain.Dto.Response;
-using Server.Service.Interfaces;
 using System.Diagnostics;
 using System.Text;
+using Server.Domain.Interfaces.Infrastructure;
 using Monitor = Server.Domain.Entities.Monitor;
 
 namespace Server.Infrastructure.Services;
