@@ -17,17 +17,11 @@ import { useState } from "react"
 import { toast } from "sonner"
 import { z } from "zod"
 import { useAuth } from "@/context/AuthContext"
-import CodeMirror from "@uiw/react-codemirror"
-import { json } from "@codemirror/lang-json"
-import { EditorView } from "@codemirror/view"
-import { closeBrackets, autocompletion } from "@codemirror/autocomplete"
 
 const monitorSchema = z.object({
   name: z.string().min(1, "Name is required"),
   url: z.string().min(1, "URL is required"),
   intervalSeconds: z.number().optional(),
-  httpMethod: z.string().optional(),
-  requestBody: z.string().optional(),
 })
 
 export default function AddMonitor({
@@ -46,8 +40,6 @@ export default function AddMonitor({
       name: "",
       url: "",
       intervalSeconds: 60,
-      httpMethod: "GET",
-      requestBody: "",
     },
   })
 
@@ -58,8 +50,6 @@ export default function AddMonitor({
         name: values.name,
         url: values.url,
         intervalSeconds: values.intervalSeconds,
-        httpMethod: values.httpMethod,
-        requestBody: values.requestBody,
       }
 
       const response = await api.post("/monitors", dataToSend)
@@ -84,7 +74,7 @@ export default function AddMonitor({
 
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
-      <AlertDialogContent className="scrollbar-hide max-h-[90vh] max-w-3xl overflow-y-auto">
+      <AlertDialogContent>
         <AlertDialogTitle className="mb-2 text-2xl font-bold">
           Create Monitor
         </AlertDialogTitle>
@@ -98,7 +88,7 @@ export default function AddMonitor({
           onSubmit={monitorForm.handleSubmit(handleSubmit)}
           className="space-y-6"
         >
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
             <Controller
               name="name"
               control={monitorForm.control}
@@ -142,7 +132,7 @@ export default function AddMonitor({
             />
           </div>
 
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
             <Controller
               name="intervalSeconds"
               control={monitorForm.control}
@@ -174,81 +164,9 @@ export default function AddMonitor({
                 </Field>
               )}
             />
-
-            <Controller
-              name="httpMethod"
-              control={monitorForm.control}
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor={field.name}>HTTP Method</FieldLabel>
-
-                  <select
-                    {...field}
-                    id={field.name}
-                    className="flex h-9 w-full rounded-md border bg-transparent px-3 py-1 text-sm shadow-xs"
-                  >
-                    <option value="GET">GET</option>
-                    <option value="POST">POST</option>
-                    <option value="PUT">PUT</option>
-                    <option value="PATCH">PATCH</option>
-                    <option value="DELETE">DELETE</option>
-                    <option value="HEAD">HEAD</option>
-                  </select>
-
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
-                  )}
-                </Field>
-              )}
-            />
           </div>
 
-          <Controller
-            name="requestBody"
-            control={monitorForm.control}
-            render={({ field, fieldState }) => (
-              <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor={field.name}>
-                  Request Body (JSON)
-                </FieldLabel>
-
-                <div className="overflow-hidden rounded-md border">
-                  <CodeMirror
-                    value={field.value ?? ""}
-                    height="220px"
-                    extensions={[
-                      json(),
-                      closeBrackets(),
-                      autocompletion(),
-                      EditorView.lineWrapping,
-                    ]}
-                    basicSetup={{
-                      lineNumbers: true,
-                      foldGutter: true,
-                      highlightActiveLine: true,
-                      highlightActiveLineGutter: true,
-                      bracketMatching: true,
-                      closeBrackets: true,
-                      autocompletion: true,
-                    }}
-                    placeholder={`{
-  "name": "EF Core migrations allow schema versioning.",
-  "url": "https://learn.microsoft.com",
-  "intervalSeconds": 2,
-  "httpMethod": "POST"
-}`}
-                    onChange={(value) => field.onChange(value)}
-                  />
-                </div>
-
-                {fieldState.invalid && (
-                  <FieldError errors={[fieldState.error]} />
-                )}
-              </Field>
-            )}
-          />
-
-          <div className="grid grid-cols-2 gap-3 pt-2">
+          <div className="grid grid-cols-2 gap-4 pt-4">
             <Button type="submit" className="w-full" disabled={isLoading}>
               {isLoading ? <SpinnerCustom /> : "Create Monitor"}
             </Button>

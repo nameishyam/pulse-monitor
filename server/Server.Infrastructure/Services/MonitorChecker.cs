@@ -1,6 +1,5 @@
 ﻿using Server.Domain.Dto.Response;
 using System.Diagnostics;
-using System.Text;
 using Server.Domain.Interfaces.Infrastructure;
 using Monitor = Server.Domain.Entities.Monitor;
 
@@ -18,16 +17,8 @@ public class MonitorChecker(IHttpClientFactory httpClientFactory)
         try
         {
             using var request = new HttpRequestMessage(
-                new HttpMethod(monitor.HttpMethod.ToString().ToUpper()),
+                new HttpMethod("GET"),
                 monitor.Url);
-
-            if (!string.IsNullOrWhiteSpace(monitor.RequestBody))
-            {
-                request.Content = new StringContent(
-                    monitor.RequestBody,
-                    Encoding.UTF8,
-                    "application/json");
-            }
 
             var stopwatch = Stopwatch.StartNew();
 

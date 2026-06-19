@@ -1,7 +1,3 @@
-"use client"
-
-import * as React from "react"
-
 import { UserSidebar } from "@/components/sidebar/UserSidebar"
 import { UserMonitors } from "@/components/sidebar/UserMonitors"
 import {

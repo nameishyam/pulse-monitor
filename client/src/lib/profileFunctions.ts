@@ -26,7 +26,7 @@ export const saveBio = async (
   onSuccess?: () => void
 ) => {
   try {
-    const res = await api.put("/users/bio", { bio })
+    const res = await api.patch("/users", { bio })
     updateUser({ bio: res.data.bio })
     toast.success("Bio updated successfully.")
     onSuccess?.()
@@ -42,17 +42,17 @@ export const uploadAvatar = async (
   setAvatarUrl: (url: string) => void
 ) => {
   const formData = new FormData()
-  formData.append("avatar", file)
+  formData.append("fileData", file)
 
   try {
-    const res = await fileApi.post(`/users/avatar`, formData)
+    const res = await fileApi.patch(`/users/profile`, formData)
 
-    if (res.data.avatarUrl) {
-      setAvatarUrl(res.data.avatarUrl)
+    if (res.data) {
+      setAvatarUrl(res.data)
       toast.success("Profile image uploaded successfully.")
     }
 
-    updateUser({ profile_url: res.data.avatarUrl })
+    updateUser({ profile_url: res.data })
   } catch (err) {
     toast.error("Failed to upload profile image.")
     console.error(err)

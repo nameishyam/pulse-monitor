@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Server.Domain.Dto.Db;
 using Server.Domain.Dto.Request.Update;
+using Server.Domain.Dto.Response;
 using Server.Domain.Interfaces.Repository;
 using Server.Domain.Interfaces.Service;
 using Server.Service.Exceptions;
@@ -42,14 +43,14 @@ public class UserService(IUserRepository userRepository) : IUserService
         return imageUrl;
     }
 
-    public async Task Update(UserUpdateRequest request, Guid userId)
+    public async Task<UserResponse> Update(UserUpdateRequest request, Guid userId)
     {
         if (!await userRepository.ExistsById(userId))
         {
             throw new NotFoundException("user with the given id not found");
         }
 
-        await userRepository.Update(new UpdateUser
+        var updatedUser = await userRepository.Update(new UpdateUser
         {
             Id = userId,
             Bio = request.Bio,
@@ -58,5 +59,15 @@ public class UserService(IUserRepository userRepository) : IUserService
             LastName = request.LastName,
             ProfileUrl = request.ProfileUrl
         });
+
+        return new UserResponse
+        {
+            Bio = updatedUser.Bio,
+            Email = updatedUser.Email,
+            FirstName = updatedUser.FirstName,
+            LastName = updatedUser.LastName,
+            ProfileUrl = updatedUser.ProfileUrl,
+            CreatedAt = updatedUser.CreatedAt
+        };
     }
 }

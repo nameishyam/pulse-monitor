@@ -3,7 +3,7 @@ export interface User {
   lastName?: string
   email?: string
   bio?: string
-  profile_url?: string
+  profileUrl?: string
   createdAt?: string
 }
 

@@ -38,7 +38,7 @@ export default function ProfileCard({ user, updateUser }: ProfileCardProps) {
   const [bioDraft, setBioDraft] = useState<string>(user?.bio || "")
 
   useEffect(() => {
-    setAvatarUrl(user?.profile_url ?? undefined)
+    setAvatarUrl(user?.profileUrl ?? undefined)
   }, [user])
 
   useEffect(() => {

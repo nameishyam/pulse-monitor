@@ -12,7 +12,7 @@ namespace Server.Api.Controllers;
 public class UsersController(IUserService userService) : Controller
 {
     [HttpPatch("profile")]
-    public async Task<IActionResult> UploadProfile([FromBody] IFormFile fileData)
+    public async Task<IActionResult> UploadProfile([FromForm] IFormFile fileData)
     {
         try
         {
@@ -29,9 +29,7 @@ public class UsersController(IUserService userService) : Controller
     {
         try
         {
-            await userService.Update(request, User.GetUserId());
-
-            return Ok();
+            return Ok(await userService.Update(request, User.GetUserId()));
         }
         catch (NotFoundException e)
         {

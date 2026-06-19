@@ -25,7 +25,6 @@ public class MonitorRepository(ServerDbContext context) : IMonitorRepository
         var monitor = new Monitor
         {
             UserId = request.UserId,
-            HttpMethod = request.HttpMethod,
             IntervalSeconds = request.IntervalSeconds,
             Name = request.Name,
             Url = request.Url
@@ -43,8 +42,6 @@ public class MonitorRepository(ServerDbContext context) : IMonitorRepository
             .FirstAsync(x => x.Id == request.Id);
 
         monitor.IntervalSeconds = request.IntervalSeconds ?? monitor.IntervalSeconds;
-        monitor.RequestBody = request.RequestBody ?? monitor.RequestBody;
-        monitor.HttpMethod = request.HttpMethod ?? monitor.HttpMethod;
         monitor.MonitorStatus = request.MonitorStatus ?? monitor.MonitorStatus;
         monitor.LastChecked = request.LastChecked ?? monitor.LastChecked;
         monitor.NextChecked = request.NextChecked ?? monitor.NextChecked;

@@ -120,7 +120,8 @@ public class AuthService(
                 LastName = user.LastName,
                 Email = user.Email,
                 Bio = user.Bio,
-                ProfileUrl = user.ProfileUrl
+                ProfileUrl = user.ProfileUrl,
+                CreatedAt = user.CreatedAt
             },
             Monitors = user.Monitors
                 .Select(m => new MonitorResponse
@@ -129,8 +130,6 @@ public class AuthService(
                     Name = m.Name,
                     Url = m.Url,
                     IntervalSeconds = m.IntervalSeconds,
-                    RequestBody = m.RequestBody,
-                    HttpMethod = m.HttpMethod,
                     MonitorStatus = m.MonitorStatus,
                     LastChecked = m.LastChecked
                 })

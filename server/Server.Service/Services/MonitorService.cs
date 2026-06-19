@@ -36,22 +36,12 @@ public class MonitorService(
             throw new InvalidDetailsException("url is invalid");
         }
 
-        if (!Enum.TryParse<HttpMethods>(
-                request.HttpMethod,
-                ignoreCase: true,
-                out var httpMethod))
-        {
-            throw new InvalidDetailsException("Invalid HTTP method.");
-        }
-
         var monitorId = await monitorRepository.Create(new CreateMonitorDb
         {
             UserId = userId,
             IntervalSeconds = request.IntervalSeconds,
             Name = request.Name,
-            Url = request.Url,
-            RequestBody = request.RequestBody,
-            HttpMethod = httpMethod
+            Url = request.Url
         });
 
         if (!await monitorRepository.ExistsById(monitorId))
@@ -63,13 +53,11 @@ public class MonitorService(
 
         return new MonitorResponse
         {
-            HttpMethod = monitor.HttpMethod,
             Id = monitorId,
             IntervalSeconds = monitor.IntervalSeconds,
             Name = monitor.Name,
             MonitorStatus = monitor.MonitorStatus,
             Url = monitor.Url,
-            RequestBody = monitor.RequestBody,
             LastChecked = monitor.LastChecked
         };
     }
@@ -81,22 +69,12 @@ public class MonitorService(
             throw new NotFoundException($"monitor with the id {id} not found");
         }
 
-        if (!Enum.TryParse<HttpMethods>(
-                request.HttpMethod,
-                ignoreCase: true,
-                out var httpMethod))
-        {
-            throw new InvalidDetailsException("Invalid HTTP method.");
-        }
-
         await monitorRepository.Update(new UpdateMonitorDb
         {
             Id = id,
-            HttpMethod = httpMethod,
             IntervalSeconds = request.IntervalSeconds,
             LastChecked = request.LastChecked,
-            MonitorStatus = request.MonitorStatus,
-            RequestBody = request.RequestBody
+            MonitorStatus = request.MonitorStatus
         });
     }
 
@@ -129,10 +107,9 @@ public class MonitorService(
             });
 
             logger.LogInformation(
-                "[{Time}] {Name} ({Method} {Url}) => {Status} ({StatusCode}) | {ResponseTime} ms",
+                "[{Timestamp}] {MonitorName} ({Url}) => {Status} ({StatusCode}) | {ResponseTime} ms",
                 DateTime.UtcNow,
                 monitor.Name,
-                monitor.HttpMethod,
                 monitor.Url,
                 result.IsSuccess ? "UP" : "DOWN",
                 result.StatusCode,
