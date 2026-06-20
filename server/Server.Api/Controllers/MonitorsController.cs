@@ -29,14 +29,28 @@ public class MonitorsController(IMonitorService monitorService) : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] MonitorCreate request)
     {
-        return Ok(await monitorService.Create(request, User.GetUserId()));
+        try
+        {
+            return Ok(await monitorService.Create(request, User.GetUserId()));
+        }
+        catch (InvalidDetailsException e)
+        {
+            return BadRequest(e.Message);
+        }
     }
 
     [HttpPatch("{id:guid}")]
     public async Task<IActionResult> Update([FromBody] MonitorUpdate request, [FromRoute] Guid id)
     {
-        await monitorService.Update(request, id);
+        try
+        {
+            await monitorService.Update(request, id);
 
-        return Ok();
+            return Ok();
+        }
+        catch (NotFoundException e)
+        {
+            return NotFound(e.Message);
+        }
     }
 }

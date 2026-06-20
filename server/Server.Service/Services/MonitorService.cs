@@ -3,19 +3,17 @@ using Server.Domain.Dto.Db;
 using Server.Domain.Dto.Request.Create;
 using Server.Domain.Dto.Request.Update;
 using Server.Domain.Dto.Response;
-using Server.Domain.Entities;
 using Server.Domain.Enums;
 using Server.Domain.Interfaces.Infrastructure;
 using Server.Domain.Interfaces.Repository;
 using Server.Domain.Interfaces.Service;
 using Server.Service.Exceptions;
-using Monitor = Server.Domain.Entities.Monitor;
 
 namespace Server.Service.Services;
 
 public class MonitorService(
     IMonitorRepository monitorRepository,
-    ILogRepository logRepository,
+    ILogService logService,
     IMonitorChecker monitorChecker,
     ILogger<MonitorService> logger) : IMonitorService
 {
@@ -58,11 +56,6 @@ public class MonitorService(
             Name = request.Name,
             Url = request.Url
         });
-
-        if (!await monitorRepository.ExistsById(monitorId))
-        {
-            throw new NotFoundException("monitor with the details not found");
-        }
 
         var monitor = await monitorRepository.GetById(monitorId);
 
@@ -113,7 +106,7 @@ public class MonitorService(
                 NextChecked = DateTime.UtcNow.AddSeconds(monitor.IntervalSeconds)
             });
 
-            await logRepository.Create(new Log
+            await logService.Create(new LogCreate
             {
                 MonitorId = monitor.Id,
                 ResponseTime = result.ResponseTime,

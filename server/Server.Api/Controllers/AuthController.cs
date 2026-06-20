@@ -129,7 +129,14 @@ public class AuthController(IAuthService authService) : ControllerBase
     [Authorize]
     public async Task<IActionResult> Me()
     {
-        return Ok(await authService.GetMeTask(User.GetUserId()));
+        try
+        {
+            return Ok(await authService.GetMeTask(User.GetUserId()));
+        }
+        catch (Exception e)
+        {
+            return StatusCode(500, e.Message);
+        }
     }
 
 
@@ -137,9 +144,16 @@ public class AuthController(IAuthService authService) : ControllerBase
     [Authorize]
     public IActionResult Logout()
     {
-        Response.Cookies.Delete(CookieName);
+        try
+        {
+            Response.Cookies.Delete(CookieName);
 
-        return Ok("Logout successful");
+            return Ok("Logout successful");
+        }
+        catch (Exception e)
+        {
+            return StatusCode(500, e.Message);
+        }
     }
 
     private void SetAuthCookie(string token)
