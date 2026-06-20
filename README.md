@@ -2,7 +2,7 @@
 
 A full-stack uptime monitoring platform that continuously monitors HTTP endpoints, records availability, stores execution history, and provides a dashboard for tracking application health.
 
-The application allows users to create monitors for APIs or websites, configure request methods and intervals, automatically perform health checks in the background, and review execution logs from a modern web interface.
+The application allows users to create monitors for APIs or websites, configure intervals, automatically perform health checks in the background, and review execution logs from a modern web interface.
 
 ---
 
@@ -32,8 +32,6 @@ Each monitor contains:
 
 - Monitor name
 - Endpoint URL
-- HTTP Method
-- Request Body (optional)
 - Monitoring interval
 - Latest status
 - Latest HTTP status code
@@ -49,7 +47,6 @@ Features include:
 
 - Automatic execution
 - Configurable intervals
-- Supports multiple HTTP methods
 - Stores response status
 - Updates monitor state
 - Generates execution logs
@@ -206,54 +203,6 @@ This improves maintainability, scalability, and testability.
 
 ---
 
-# Database Schema
-
-## Users
-
-| Field | Type |
-|--------|------|
-| Id | UUID |
-| Name | Text |
-| Email | Text |
-| PasswordHash | Text |
-| CreatedAt | Timestamp |
-| UpdatedAt | Timestamp |
-
----
-
-## Monitors
-
-| Field | Type |
-|--------|------|
-| Id | UUID |
-| UserId | UUID |
-| Name | Text |
-| Url | Text |
-| HttpMethod | Integer |
-| IntervalSeconds | Integer |
-| RequestBody | Text |
-| MonitorStatus | Integer |
-| HttpStatusCode | Integer |
-| LastChecked | Timestamp |
-| CreatedAt | Timestamp |
-| UpdatedAt | Timestamp |
-
----
-
-## Logs
-
-| Field | Type |
-|--------|------|
-| Id | UUID |
-| MonitorId | UUID |
-| Status | Integer |
-| HttpStatusCode | Integer |
-| ResponseTime | Integer |
-| Error | Text |
-| CheckedAt | Timestamp |
-
----
-
 # Monitoring Flow
 
 ```
@@ -279,39 +228,6 @@ Create Log
        │
        ▼
 Dashboard Updates
-```
-
----
-
-# API Overview
-
-## Authentication
-
-```
-POST   /api/v1/auth/register
-POST   /api/v1/auth/login
-POST   /api/v1/auth/logout
-GET    /api/v1/auth/me
-```
-
----
-
-## Monitors
-
-```
-GET     /api/v1/monitors
-GET     /api/v1/monitors/{id}
-POST    /api/v1/monitors
-PATCH   /api/v1/monitors/{id}
-DELETE  /api/v1/monitors/{id}
-```
-
----
-
-## Logs
-
-```
-GET /api/v1/logs/{monitorId}
 ```
 
 ---
@@ -445,9 +361,7 @@ ConnectionStrings__DefaultConnection=
 Jwt__Issuer=
 Jwt__Audience=
 Jwt__Key=
-
-Supabase__ProjectUrl=
-Supabase__ServiceRoleKey=
+Jwt__ExpiryMinutes=
 ```
 
 Frontend
@@ -479,39 +393,15 @@ VITE_API_URL=http://localhost:5000
 - Webhook alerts
 - SSL certificate monitoring
 - Custom request headers
+- Custom HTTP Methods and Request Bodies
 - Authentication headers
 - Response content validation
 - Status analytics
 - Historical uptime charts
-- Downtime reports
 - Incident management
 - Docker deployment
 - Kubernetes support
 - Multi-region workers
-- Prometheus metrics
-- Grafana dashboards
-- OpenTelemetry integration
-
----
-
-# Screenshots
-
-```
-docs/
-├── login.png
-├── dashboard.png
-├── monitors.png
-├── logs.png
-└── profile.png
-```
-
----
-
-# Author
-
-**Syam Gowtham**
-
-Associate Product Engineer
 
 ---
 
