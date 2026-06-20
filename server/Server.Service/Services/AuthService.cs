@@ -37,8 +37,82 @@ public class AuthService(
 
         await authRepository.Create(user);
 
-        await emailService.SendEmailAsync(user.Email, "Welcome to Pulse Monitor",
-            $"Glad to have you onboard {user.FirstName}!");
+        await emailService.SendEmailAsync(
+    user.Email,
+    "🎉 Welcome to Pulse Monitor!",
+    $"""
+    <html>
+    <body style="margin:0;padding:0;background-color:#f5f5f5;font-family:Arial,Helvetica,sans-serif;">
+        <table width="100%" cellpadding="0" cellspacing="0">
+            <tr>
+                <td align="center" style="padding:40px 20px;">
+                    <table width="600" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:10px;padding:40px;box-shadow:0 2px 8px rgba(0,0,0,0.08);">
+
+                        <tr>
+                            <td align="center">
+                                <h1 style="color:#2563eb;margin-bottom:10px;">
+                                    Welcome to Pulse Monitor!
+                                </h1>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <p style="font-size:16px;color:#333;">
+                                    Hi <strong>{user.FirstName}</strong>,
+                                </p>
+
+                                <p style="font-size:16px;color:#333;line-height:1.8;">
+                                    Thank you for joining <strong>Pulse Monitor</strong>.
+                                    Your account has been created successfully and you're ready
+                                    to start monitoring your APIs, websites, and services.
+                                </p>
+
+                                <hr style="margin:30px 0;border:none;border-top:1px solid #e5e5e5;" />
+
+                                <h3 style="color:#2563eb;">
+                                    What you can do next
+                                </h3>
+
+                                <ul style="color:#333;line-height:1.8;">
+                                    <li>Create your first monitor.</li>
+                                    <li>Choose the monitoring interval.</li>
+                                    <li>Receive instant email alerts when an endpoint goes down.</li>
+                                    <li>View response times and status history.</li>
+                                    <li>Track uptime with detailed monitoring logs.</li>
+                                </ul>
+
+                                <hr style="margin:30px 0;border:none;border-top:1px solid #e5e5e5;" />
+
+                                <p style="font-size:16px;color:#333;">
+                                    We hope Pulse Monitor helps you keep your services reliable and available.
+                                </p>
+
+                                <p style="font-size:16px;color:#333;">
+                                    Happy Monitoring!
+                                </p>
+
+                                <br />
+
+                                <p style="color:#2563eb;font-weight:bold;">
+                                    — Pulse Monitor Team
+                                </p>
+
+                                <br />
+
+                                <p style="font-size:12px;color:#888;">
+                                    This is an automated email. Please do not reply.
+                                </p>
+                            </td>
+                        </tr>
+
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </body>
+    </html>
+    """);
 
         return GenerateToken(user);
     }
@@ -70,8 +144,85 @@ public class AuthService(
         user.OtpExpiry = DateTime.UtcNow.AddMinutes(10);
         await authRepository.Update(user);
 
-        await emailService.SendEmailAsync(email, "Password reset OTP",
-            $"Your OTP to reset password: {user.Otp}");
+        await emailService.SendEmailAsync(
+    email,
+    "🔐 Pulse Monitor - Password Reset OTP",
+    $"""
+    <html>
+    <body style="margin:0;padding:0;background-color:#f5f5f5;font-family:Arial,Helvetica,sans-serif;">
+        <table width="100%" cellpadding="0" cellspacing="0">
+            <tr>
+                <td align="center" style="padding:40px 20px;">
+                    <table width="600" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:10px;padding:40px;box-shadow:0 2px 8px rgba(0,0,0,0.08);">
+
+                        <tr>
+                            <td align="center">
+                                <h1 style="color:#2563eb;margin-bottom:10px;">
+                                    Password Reset Request
+                                </h1>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <p style="font-size:16px;color:#333;">
+                                    We received a request to reset the password for your
+                                    <strong>Pulse Monitor</strong> account.
+                                </p>
+
+                                <p style="font-size:16px;color:#333;">
+                                    Use the following One-Time Password (OTP) to continue:
+                                </p>
+
+                                <div style="margin:35px 0;text-align:center;">
+                                    <span style="
+                                        display:inline-block;
+                                        padding:16px 32px;
+                                        font-size:32px;
+                                        font-weight:bold;
+                                        letter-spacing:8px;
+                                        color:#2563eb;
+                                        background:#eef4ff;
+                                        border:2px dashed #2563eb;
+                                        border-radius:8px;">
+                                        {user.Otp}
+                                    </span>
+                                </div>
+
+                                <p style="font-size:15px;color:#333;">
+                                    This OTP is valid for <strong>10 minutes</strong>.
+                                </p>
+
+                                <p style="font-size:15px;color:#333;">
+                                    If you did not request a password reset, you can safely ignore this email. Your account will remain secure.
+                                </p>
+
+                                <hr style="margin:30px 0;border:none;border-top:1px solid #e5e5e5;" />
+
+                                <p style="font-size:13px;color:#777;">
+                                    For security reasons, never share this OTP with anyone.
+                                    Pulse Monitor will never ask you for your OTP via email or phone.
+                                </p>
+
+                                <br />
+
+                                <p style="color:#2563eb;font-weight:bold;">
+                                    — Pulse Monitor Team
+                                </p>
+
+                                <p style="font-size:12px;color:#888;">
+                                    This is an automated email. Please do not reply.
+                                </p>
+                            </td>
+                        </tr>
+
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </body>
+    </html>
+    """);
     }
 
     public async Task VerifyUser(VerifyOtp request)
@@ -149,7 +300,7 @@ public class AuthService(
 
         var credentials = new SigningCredentials(
             key,
-            SecurityAlgorithms.HmacSha512);
+            SecurityAlgorithms.HmacSha256);
 
         var token = new JwtSecurityToken(
             issuer: jwtOptions.Value.Issuer,
