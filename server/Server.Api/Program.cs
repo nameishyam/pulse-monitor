@@ -1,10 +1,8 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Server.Api.Extensions;
-using Server.Infrastructure.Services;
 using Server.Infrastructure.Workers;
 using System.Text;
-using Server.Domain.Interfaces.Infrastructure;
 
 namespace Server.Api;
 
@@ -65,9 +63,9 @@ public static class Program
 
         builder.Services.AddRepository(builder.Configuration);
         builder.Services.AddService(builder.Configuration);
+        builder.Services.AddInfrastructure();
 
         builder.Services.AddHttpClient();
-        builder.Services.AddScoped<IMonitorChecker, MonitorChecker>();
 
         builder.Services.AddHostedService<MonitorWorker>();
 
